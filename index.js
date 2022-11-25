@@ -43,6 +43,13 @@ app.post('/bookings', async (req, res) => {
     res.send(result);
 })
 
+app.get('/users', async (req, res)=> {
+    const email = req.query.email;
+    const query = {email : email};
+    const user = await usersCollection.findOne(query);
+    res.send(user);
+})
+
 app.get('/', (req, res) => {
     res.send('server running')
 })
