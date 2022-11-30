@@ -77,6 +77,13 @@ app.get('/advertisedItems', async (req, res)=> {
     res.send(result);
 })
 
+app.delete('/advertisedItems/:id', async(req, res)=> {
+    const id = req.params.id;
+    const query = {_id : id};
+    const result  = await advertisedItems.deleteOne(query);
+    res.send(result);
+})
+
 app.patch('/updateProduct/:id', async (req, res)=> {
     const id = req.params.id;
     const filter = {_id: ObjectId(id)};
@@ -89,12 +96,6 @@ app.patch('/updateProduct/:id', async (req, res)=> {
     res.send(result);
 })
 
-app.delete('/advertisedItems/:id', async(req, res)=> {
-    const id = req.params.id;
-    const query = {_id : id};
-    const result  = await advertisedItems.deleteOne(query);
-    res.send(result);
-})
 
 app.delete('/addedProducts/:id', async(req, res)=> {
     const id = req.params.id;
@@ -103,10 +104,30 @@ app.delete('/addedProducts/:id', async(req, res)=> {
     res.send(result);
 })
 
-app.get('/allUsers', async (req, res) => {
-    const filter = {type : "Seller"};
+// admin routes
+app.get('/allBuyers', async (req, res) => {
+    const filter = {type : "User"};
     const buyers = await usersCollection.find(filter).toArray();
     res.send(buyers)
+})
+
+app.get('/allSellers', async (req, res) => {
+    const filter = {type : "Seller"};
+    const sellers = await usersCollection.find(filter).toArray();
+    res.send(sellers)
+})
+
+app.delete('/allBuyers/:id', async (req, res) => {
+    const id = req.params.id;
+    const filter = {_id : ObjectId(id)};
+    const result = await usersCollection.deleteOne(filter);
+    res.send(result)
+})
+app.delete('/allSellers/:id', async (req, res) => {
+    const id = req.params.id;
+    const filter = {_id : ObjectId(id)};
+    const result = await usersCollection.deleteOne(filter);
+    res.send(result)
 })
 
 app.get('/', (req, res) => {
