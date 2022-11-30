@@ -17,7 +17,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const categoriesCollection = client.db('readers-port').collection('categories');
 const usersCollection = client.db('readers-port').collection('users');
 const bookingsCollection = client.db('readers-port').collection('bookings');
-const addedProductsCollection = client.db('readers-port').collection('addedProducts')
+const addedProductsCollection = client.db('readers-port').collection('addedProducts');
+const advertisedItems = client.db('readers-port').collection('advertisedItems')
 
 app.get('/categories', async (req, res) =>{
     const query = {}
@@ -61,6 +62,30 @@ app.get('/myProducts', async (req, res) => {
     const email = req.query.email;
     const query = {email : email};
     const result = await addedProductsCollection.find(query).toArray();
+    res.send(result);
+})
+
+app.post('/advertise', async (req, res)=> {
+    const product = req.body;
+    const result = await advertisedItems.insertOne(product);
+    res.send(result);
+})
+
+app.get('/advertisedItems', async (req, res)=> {
+    const query = {};
+    const result = await advertisedItems.find(query).toArray();
+    res.send(result);
+})
+
+app.patch('/updateProduct/:id', async (req, res)=> {
+    const id = req.params.id;
+    const filter = {_id: ObjectId(id)};
+    const updateDoc = {
+        $set : {
+            status : "sold"
+        }
+    };
+    const result = await addedProductsCollection.updateOne(filter,updateDoc);
     res.send(result);
 })
 
