@@ -19,7 +19,7 @@ const usersCollection = client.db('readers-port').collection('users');
 const bookingsCollection = client.db('readers-port').collection('bookings');
 const addedProductsCollection = client.db('readers-port').collection('addedProducts');
 const advertisedItems = client.db('readers-port').collection('advertisedItems')
-
+// book categories
 app.get('/categories', async (req, res) =>{
     const query = {}
     const categories = await categoriesCollection.find(query).toArray();
@@ -38,7 +38,7 @@ app.post('/users', async (req, res) => {
     const result = await usersCollection.insertOne(user);
     res.send(result)
 })
-
+// buyers bookings
 app.post('/bookings', async (req, res) => {
     const booking = req.body;
     const result = await bookingsCollection.insertOne(booking);
@@ -57,7 +57,7 @@ app.post('/addedProduct', async (req, res) => {
     const result = await addedProductsCollection.insertOne(product);
     res.send(result);
 })
-
+// added products
 app.get('/myProducts', async (req, res) => {
     const email = req.query.email;
     const query = {email : email};
